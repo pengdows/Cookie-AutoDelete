@@ -13,9 +13,9 @@
 
 import { getHostname, returnMatchedExpressionObject } from './Libs';
 
+// Use the unified action API (Manifest V3) with fallback to browserAction (Manifest V2)
 const browserAction: typeof browser.browserAction =
-  (browser as unknown as { action?: typeof browser.browserAction }).action ||
-  browser.browserAction;
+  (browser as any).action || browser.browserAction;
 
 // Show the # of cookies in icon
 export const showNumberOfCookiesInIcon = (

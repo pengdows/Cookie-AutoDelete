@@ -51,7 +51,9 @@ const saveToStorage = () => {
 
 const onStartUp = async () => {
   const mf = browser.runtime.getManifest();
-  browser.browserAction.setTitle({
+  // Use the unified action API (Manifest V3) with fallback to browserAction (Manifest V2)
+  const actionAPI = (browser as any).action || browser.browserAction;
+  actionAPI.setTitle({
     title: `${mf.name} ${mf.version} [STARTING UP...] (0)`,
   });
   const storage = await browser.storage.local.get();
@@ -146,7 +148,7 @@ const onStartUp = async () => {
   if (browser.contextualIdentities) {
     await ContextualIdentitiesEvents.init();
   }
-  browser.browserAction.setTitle({
+  actionAPI.setTitle({
     title: `${mf.name} ${mf.version} [READY] (0)`,
   });
 };

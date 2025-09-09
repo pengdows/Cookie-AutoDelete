@@ -193,6 +193,9 @@ function browserDetect() {
 }
 global.browserDetect = browserDetect;
 
+// Setup @testing-library/jest-dom for React testing
+require('@testing-library/jest-dom');
+
 /**
  * This hides the test console debug logs from jest results.
  */

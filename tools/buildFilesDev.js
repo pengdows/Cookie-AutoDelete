@@ -188,8 +188,8 @@ function chromeBuild(cb) {
   const mf = require(path.join(EXTDIR, MANIFEST));
   delMFPerm(mf, 'contextualIdentities');
   console.log(
-    '> Removing [applications] section ... %s',
-    delete mf.applications ? 'Done!' : 'Failed',
+    '> Removing [browser_specific_settings] section ... %s',
+    delete mf.browser_specific_settings ? 'Done!' : 'Failed',
   );
 
   console.log('Overwriting %s for Google Chrome ...', MANIFEST);
