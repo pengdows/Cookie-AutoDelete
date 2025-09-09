@@ -275,12 +275,12 @@ const ActivityTable: React.FunctionComponent<ActivityTableProps> = (props) => {
             >
               {(log.recentlyCleaned > 0 && (
                 <IconButton
-                  className={'btn-primary mr-auto'}
+                  className={'btn-primary me-auto'}
                   iconName={'undo'}
                   onClick={() => restoreCookies(state, log, onRemoveActivity)}
                   title={browser.i18n.getMessage('restoreText')}
                 />
-              )) || <div className={'mr-auto'} style={{ minWidth: '42px' }} />}
+              )) || <div className={'me-auto'} style={{ minWidth: '42px' }} />}
               <h5
                 className="mb-0"
                 style={{
@@ -290,8 +290,8 @@ const ActivityTable: React.FunctionComponent<ActivityTableProps> = (props) => {
                 <button
                   className="btn btn-link collapsed"
                   type="button"
-                  data-toggle="collapse"
-                  data-target={`#collapse${index}`}
+                  data-bs-toggle="collapse"
+                  data-bs-target={`#collapse${index}`}
                   aria-expanded="false"
                   aria-controls={`collapse${index}`}
                 >
@@ -301,7 +301,7 @@ const ActivityTable: React.FunctionComponent<ActivityTableProps> = (props) => {
                 </button>
               </h5>
               <IconButton
-                className={'btn-outline-danger ml-auto'}
+                className={'btn-outline-danger ms-auto'}
                 iconName={'trash'}
                 onClick={() => onRemoveActivity(log)}
                 title={browser.i18n.getMessage('removeActivityLogEntryText')}

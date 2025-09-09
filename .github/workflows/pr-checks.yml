@@ -1,0 +1,213 @@
+name: Pull Request Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  pr-validation:
+    name: PR Validation
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    steps:
+      - name: Checkout PR code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Validate package.json
+        run: |
+          echo "=== Validating package.json ===" 
+          node -e "console.log('Package.json is valid JSON')" < package.json
+          
+      - name: Check for security issues
+        run: npm audit --audit-level=high
+        
+      - name: Run comprehensive tests
+        run: |
+          npm run test-all
+          
+      - name: Test build process
+        run: |
+          npm run build
+          # Verify essential files exist
+          test -f extension/manifest.json
+          test -d extension/global_files
+          echo "Build validation passed"
+          
+      - name: Check TypeScript compilation
+        run: npm run compile
+        
+      - name: Validate extension structure
+        run: |
+          echo "=== Extension structure validation ===" 
+          # Check manifest exists and is valid JSON
+          if [ -f extension/manifest.json ]; then
+            echo "✓ Manifest file exists"
+            node -e "JSON.parse(require('fs').readFileSync('extension/manifest.json', 'utf8')); console.log('✓ Manifest is valid JSON')"
+          else
+            echo "✗ Manifest file missing"
+            exit 1
+          fi
+          
+          # Check for required bundle files
+          if [ -f extension/background.bundle.js ]; then
+            echo "✓ Background script bundle exists"
+          else
+            echo "✗ Background script bundle missing"
+            exit 1
+          fi
+          
+          if [ -f extension/popup.bundle.js ]; then
+            echo "✓ Popup script bundle exists"
+          else
+            echo "✗ Popup script bundle missing"
+            exit 1
+          fi
+          
+          echo "✓ Extension structure validation passed"
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    steps:
+      - name: Checkout PR code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Security audit
+        run: npm audit --audit-level=moderate
+        continue-on-error: true
+        
+      - name: Check for sensitive files
+        run: |
+          echo "=== Checking for sensitive files ===" 
+          # Look for potential sensitive files that shouldn't be committed
+          SENSITIVE_FILES=""
+          
+          if find . -name "*.key" -o -name "*.pem" -o -name "*.p12" -o -name ".env" | head -1 | grep -q .; then
+            SENSITIVE_FILES="$SENSITIVE_FILES\n- Private keys or certificates found"
+          fi
+          
+          if find . -name "*secret*" -o -name "*password*" | grep -v node_modules | grep -v ".git" | head -1 | grep -q .; then
+            SENSITIVE_FILES="$SENSITIVE_FILES\n- Files with 'secret' or 'password' in name found"
+          fi
+          
+          if [ -n "$SENSITIVE_FILES" ]; then
+            echo "⚠️  Potentially sensitive files detected:$SENSITIVE_FILES"
+            echo "Please review these files to ensure no secrets are committed."
+          else
+            echo "✓ No sensitive files detected"
+          fi
+          
+      - name: Check code for hardcoded secrets
+        run: |
+          echo "=== Scanning for potential secrets in code ===" 
+          # Basic secret pattern detection
+          PATTERNS_FOUND=""
+          
+          # API keys (basic patterns)
+          if grep -r -i --include="*.ts" --include="*.js" "api[_-]key\s*[:=]\s*['\"][^'\"]{20,}" src/ 2>/dev/null | head -1 | grep -q .; then
+            PATTERNS_FOUND="$PATTERNS_FOUND\n- Potential API key patterns found"
+          fi
+          
+          # Long random strings that might be secrets
+          if grep -r --include="*.ts" --include="*.js" "['\"][a-zA-Z0-9]{32,}['\"]" src/ 2>/dev/null | grep -v "test" | head -1 | grep -q .; then
+            PATTERNS_FOUND="$PATTERNS_FOUND\n- Long random strings found (possible secrets)"
+          fi
+          
+          if [ -n "$PATTERNS_FOUND" ]; then
+            echo "⚠️  Potential secrets detected:$PATTERNS_FOUND"
+            echo "Please review the code to ensure no secrets are hardcoded."
+          else
+            echo "✓ No obvious secret patterns detected"
+          fi
+
+  size-check:
+    name: Bundle Size Check
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    steps:
+      - name: Checkout base branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          
+      - name: Install dependencies and build base
+        run: |
+          npm ci
+          npm run build
+          mkdir -p /tmp/base-build
+          cp -r extension /tmp/base-build/
+          
+      - name: Checkout PR code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          clean: false
+          
+      - name: Build PR version
+        run: |
+          npm ci
+          npm run build
+          
+      - name: Compare bundle sizes
+        run: |
+          echo "=== Bundle Size Comparison ===" 
+          echo "| File | Base Size | PR Size | Difference |"
+          echo "|------|-----------|---------|------------|"
+          
+          for file in extension/*.bundle.js; do
+            if [ -f "$file" ]; then
+              filename=$(basename "$file")
+              base_file="/tmp/base-build/extension/$filename"
+              
+              if [ -f "$base_file" ]; then
+                base_size=$(stat -f%z "$base_file" 2>/dev/null || stat -c%s "$base_file" 2>/dev/null || echo "0")
+                pr_size=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null || echo "0")
+                diff=$((pr_size - base_size))
+                diff_percent=$(( diff * 100 / base_size ))
+                
+                echo "| $filename | ${base_size} bytes | ${pr_size} bytes | ${diff} bytes (${diff_percent}%) |"
+                
+                # Warn if bundle grew significantly
+                if [ $diff -gt 10240 ]; then # 10KB
+                  echo "⚠️  $filename increased by more than 10KB"
+                fi
+              else
+                pr_size=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null || echo "0")
+                echo "| $filename | NEW | ${pr_size} bytes | +${pr_size} bytes (new) |"
+              fi
+            fi
+          done

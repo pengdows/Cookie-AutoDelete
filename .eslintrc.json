@@ -4,36 +4,72 @@
     "jest": true,
     "node": true,
     "webextensions": true,
-    "es2020": true
+    "es2022": true
   },
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
     },
-    "ecmaVersion": 11,
+    "ecmaVersion": "latest",
     "sourceType": "module"
   },
   "settings": {
     "react": {
-      "createClass": "createReactClass", // Regex for Component Factory to use,
-      // default to "createReactClass"
-      "pragma": "React", // Pragma to use, default to "React"
-      "version": "detect" // React version. "detect" automatically picks the version you have installed.
+      "createClass": "createReactClass",
+      "pragma": "React",
+      "version": "detect"
     }
   },
-  "plugins": ["react", "@typescript-eslint"],
+  "plugins": [
+    "react", 
+    "@typescript-eslint",
+    "prefer-arrow"
+  ],
   "rules": {
     "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
+    "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/no-unsafe-argument": "off",
+    "@typescript-eslint/no-unsafe-return": "off",
+    "@typescript-eslint/no-unsafe-enum-comparison": "off",
+    "@typescript-eslint/unbound-method": "off",
+    "@typescript-eslint/restrict-template-expressions": "off",
+    "@typescript-eslint/no-floating-promises": "off",
+    "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/prefer-nullish-coalescing": "off",
+    "@typescript-eslint/prefer-optional-chain": "off",
     "react/jsx-uses-react": "off",
-    "react/prop-types": ["off"],
+    "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
-    "no-console": "warn"
-  }
+    "no-console": "warn",
+    "prefer-arrow/prefer-arrow-functions": [
+      "warn",
+      {
+        "disallowPrototype": true,
+        "singleReturnOnly": false,
+        "classPropertiesAllowed": false
+      }
+    ],
+    "prefer-const": "warn",
+    "no-var": "error"
+  },
+  "ignorePatterns": [
+    "node_modules/",
+    "extension/",
+    "builds/",
+    "coverage/",
+    "*.js",
+    "tools/"
+  ]
 }

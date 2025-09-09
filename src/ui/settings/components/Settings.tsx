@@ -283,7 +283,7 @@ class Settings extends React.Component<SettingProps> {
 
         <fieldset>
           <legend>{browser.i18n.getMessage('settingGroupAutoClean')}</legend>
-          <div className="form-group">
+          <div className="mb-3">
             <CheckboxSetting
               text={browser.i18n.getMessage('activeModeText')}
               inline={true}
@@ -292,7 +292,7 @@ class Settings extends React.Component<SettingProps> {
             />
             <SettingsTooltip hrefURL={'#enable-automatic-cleaning'} />
           </div>
-          <div className="form-group">
+          <div className="mb-3">
             <input
               id="delayBeforeClean"
               type="number"
@@ -318,7 +318,7 @@ class Settings extends React.Component<SettingProps> {
             </label>
             <SettingsTooltip hrefURL={'#delay-before-automatic-cleaning'} />
           </div>
-          <div className="form-group">
+          <div className="mb-3">
             <CheckboxSetting
               text={browser.i18n.getMessage('cleanDiscardedText')}
               settingObject={settings[SettingID.CLEAN_DISCARDED]}
@@ -329,7 +329,7 @@ class Settings extends React.Component<SettingProps> {
               hrefURL={'#enable-cleanup-for-discardedunloaded-tabs'}
             />
           </div>
-          <div className="form-group">
+          <div className="mb-3">
             <CheckboxSetting
               text={browser.i18n.getMessage('cleanupDomainChangeText')}
               settingObject={settings[SettingID.CLEAN_DOMAIN_CHANGE]}
@@ -338,7 +338,7 @@ class Settings extends React.Component<SettingProps> {
             />
             <SettingsTooltip hrefURL={'#enable-cleanup-on-domain-change'} />
           </div>
-          <div className="form-group">
+          <div className="mb-3">
             <CheckboxSetting
               text={browser.i18n.getMessage(SettingID.ENABLE_GREYLIST)}
               settingObject={settings[SettingID.ENABLE_GREYLIST]}
@@ -349,7 +349,7 @@ class Settings extends React.Component<SettingProps> {
               hrefURL={'#enable-greylist-cleanup-on-browser-restart'}
             />
           </div>
-          <div className="form-group">
+          <div className="mb-3">
             <CheckboxSetting
               text={browser.i18n.getMessage('cookieCleanUpOnStartText')}
               settingObject={settings[SettingID.CLEAN_OPEN_TABS_STARTUP]}
@@ -360,7 +360,7 @@ class Settings extends React.Component<SettingProps> {
               hrefURL={'#clean-cookies-from-open-tabs-on-startup'}
             />
           </div>
-          <div className="form-group">
+          <div className="mb-3">
             <CheckboxSetting
               settingObject={settings[SettingID.CLEAN_EXPIRED]}
               inline={true}
@@ -386,7 +386,7 @@ class Settings extends React.Component<SettingProps> {
             <legend>
               {browser.i18n.getMessage('settingGroupOtherBrowsing')}
             </legend>
-            <div className="form-group">
+            <div className="mb-3">
               <CheckboxSetting
                 text={browser.i18n.getMessage('siteDataEmptyOnEnable')}
                 settingObject={settings[SettingID.SITEDATA_EMPTY_ON_ENABLE]}
@@ -416,7 +416,7 @@ class Settings extends React.Component<SettingProps> {
             </div>
             {((isFirefoxNotAndroid(cache) && ffVersion >= 78) ||
               isChrome(cache)) && (
-              <div className="form-group">
+              <div className="mb-3">
                 <CheckboxSetting
                   text={browser.i18n.getMessage('cacheCleanupText')}
                   settingObject={settings[SettingID.CLEANUP_CACHE]}
@@ -430,7 +430,7 @@ class Settings extends React.Component<SettingProps> {
             )}
             {((isFirefoxNotAndroid(cache) && ffVersion >= 77) ||
               isChrome(cache)) && (
-              <div className="form-group">
+              <div className="mb-3">
                 <CheckboxSetting
                   text={browser.i18n.getMessage('indexedDBCleanupText')}
                   settingObject={settings[SettingID.CLEANUP_INDEXEDDB]}
@@ -444,7 +444,7 @@ class Settings extends React.Component<SettingProps> {
             )}
             {((isFirefoxNotAndroid(cache) && ffVersion >= 58) ||
               isChrome(cache)) && (
-              <div className="form-group">
+              <div className="mb-3">
                 <CheckboxSetting
                   text={browser.i18n.getMessage('localStorageCleanupText')}
                   settingObject={settings[SettingID.CLEANUP_LOCALSTORAGE]}
@@ -458,7 +458,7 @@ class Settings extends React.Component<SettingProps> {
             )}
             {((isFirefoxNotAndroid(cache) && ffVersion >= 78) ||
               isChrome(cache)) && (
-              <div className="form-group">
+              <div className="mb-3">
                 <CheckboxSetting
                   text={browser.i18n.getMessage('pluginDataCleanupText')}
                   settingObject={settings[SettingID.CLEANUP_PLUGINDATA]}
@@ -472,7 +472,7 @@ class Settings extends React.Component<SettingProps> {
             )}
             {((isFirefoxNotAndroid(cache) && ffVersion >= 77) ||
               isChrome(cache)) && (
-              <div className="form-group">
+              <div className="mb-3">
                 <CheckboxSetting
                   text={browser.i18n.getMessage('serviceWorkersCleanupText')}
                   settingObject={settings[SettingID.CLEANUP_SERVICEWORKERS]}
@@ -490,7 +490,7 @@ class Settings extends React.Component<SettingProps> {
         <fieldset>
           <legend>{browser.i18n.getMessage('settingGroupExtension')}</legend>
           {isFirefoxNotAndroid(cache) && (
-            <div className="form-group">
+            <div className="mb-3">
               <div className="alert alert-warning">
                 {browser.i18n.getMessage('containerSiteDataWarning')}
               </div>
@@ -509,7 +509,7 @@ class Settings extends React.Component<SettingProps> {
           )}
           {isFirefoxNotAndroid(cache) &&
             settings[SettingID.CONTEXTUAL_IDENTITIES].value && (
-              <div className="form-group">
+              <div className="mb-3">
                 <CheckboxSetting
                   text={browser.i18n.getMessage(
                     'contextualIdentitiesAutoRemoveText',
@@ -527,7 +527,7 @@ class Settings extends React.Component<SettingProps> {
                 />
               </div>
             )}
-          <div className="form-group">
+          <div className="mb-3">
             <CheckboxSetting
               text={browser.i18n.getMessage('enableCleanupLogText')}
               settingObject={settings[SettingID.STAT_LOGGING]}
@@ -542,7 +542,7 @@ class Settings extends React.Component<SettingProps> {
             )}
           </div>
           {(!isFirefox(cache) || isFirefoxNotAndroid(cache)) && (
-            <div className="form-group">
+            <div className="mb-3">
               <CheckboxSetting
                 text={browser.i18n.getMessage('showNumberOfCookiesInIconText')}
                 settingObject={settings[SettingID.NUM_COOKIES_ICON]}
@@ -556,7 +556,7 @@ class Settings extends React.Component<SettingProps> {
           )}
           {(!isFirefox(cache) || isFirefoxNotAndroid(cache)) &&
             settings[SettingID.NUM_COOKIES_ICON].value === true && (
-              <div className="form-group">
+              <div className="mb-3">
                 <CheckboxSetting
                   text={browser.i18n.getMessage(SettingID.KEEP_DEFAULT_ICON)}
                   settingObject={settings[SettingID.KEEP_DEFAULT_ICON]}
@@ -568,7 +568,7 @@ class Settings extends React.Component<SettingProps> {
                 />
               </div>
             )}
-          <div className="form-group">
+          <div className="mb-3">
             <CheckboxSetting
               text={browser.i18n.getMessage('notifyCookieCleanUpText')}
               settingObject={settings[SettingID.NOTIFY_AUTO]}
@@ -579,7 +579,7 @@ class Settings extends React.Component<SettingProps> {
               hrefURL={'#show-notification-after-automatic-cleanup'}
             />
           </div>
-          <div className="form-group">
+          <div className="mb-3">
             <CheckboxSetting
               inline={true}
               settingObject={settings[SettingID.NOTIFY_MANUAL]}
@@ -590,7 +590,7 @@ class Settings extends React.Component<SettingProps> {
               hrefURL={'#show-notification-from-manual-site-data-cleanups'}
             />
           </div>
-          <div className="form-group">
+          <div className="mb-3">
             <SelectInput
               numSize={9}
               numStart={1}
@@ -604,7 +604,7 @@ class Settings extends React.Component<SettingProps> {
             />
             <SettingsTooltip hrefURL={'#duration-for-notifications'} />
           </div>
-          <div className="form-group">
+          <div className="mb-3">
             <CheckboxSetting
               text={browser.i18n.getMessage(SettingID.ENABLE_NEW_POPUP)}
               settingObject={settings[SettingID.ENABLE_NEW_POPUP]}
@@ -615,7 +615,7 @@ class Settings extends React.Component<SettingProps> {
               hrefURL={'#enable-popup-when-new-version-is-released'}
             />
           </div>
-          <div className="form-group">
+          <div className="mb-3">
             <SelectInput
               numSize={14}
               numStart={10}
@@ -625,7 +625,7 @@ class Settings extends React.Component<SettingProps> {
             />
             <SettingsTooltip hrefURL={'#size-of-popup'} />
           </div>
-          <div className="form-group">
+          <div className="mb-3">
             <SelectInput
               numSize={14}
               numStart={10}
@@ -638,7 +638,7 @@ class Settings extends React.Component<SettingProps> {
             <SettingsTooltip hrefURL={'#size-of-setting'} />
           </div>
           {(isFirefoxNotAndroid(cache) || isChrome(cache)) && (
-            <div className="form-group">
+            <div className="mb-3">
               <CheckboxSetting
                 text={browser.i18n.getMessage('enableContextMenus')}
                 settingObject={settings[SettingID.CONTEXT_MENUS]}
@@ -649,7 +649,7 @@ class Settings extends React.Component<SettingProps> {
             </div>
           )}
           {(isFirefoxNotAndroid(cache) || isChrome(cache)) && (
-            <div className="form-group">
+            <div className="mb-3">
               <CheckboxSetting
                 text={browser.i18n.getMessage(SettingID.DEBUG_MODE)}
                 settingObject={settings[SettingID.DEBUG_MODE]}

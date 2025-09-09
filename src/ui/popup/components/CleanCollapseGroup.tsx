@@ -67,7 +67,7 @@ const CleanCollapseGroup: React.FunctionComponent<CleanCollapseComponentProps> =
           />
           <button
             aria-disabled={true}
-            className="px-2 btn btn-light btn-block text-danger font-weight-bold"
+            className="px-2 btn btn-light w-100 text-danger fw-bold"
             disabled={true}
             type="button"
           >

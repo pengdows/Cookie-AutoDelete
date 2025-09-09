@@ -167,7 +167,7 @@ class App extends Component<PopupAppComponentProps, InitialState> {
           const _t = e.target as HTMLElement;
           const _ccg = document.getElementById('cleanCollapse');
           if (!_ccg || !_ccg.classList.contains('show')) return;
-          const _dt = _t.attributes.getNamedItem('data-target');
+          const _dt = _t.attributes.getNamedItem('data-bs-target');
           if (!_dt || _dt.value !== '#cleanCollapse') {
             _ccg.classList.remove('show');
           }
@@ -266,15 +266,15 @@ class App extends Component<PopupAppComponentProps, InitialState> {
               aria-expanded="false"
               className="btn btn-warning dropdown-toggle dropdown-toggle-split"
               data-disabled="true"
-              data-target="#cleanCollapse"
-              data-toggle="collapse"
+              data-bs-target="#cleanCollapse"
+              data-bs-toggle="collapse"
               role="button"
               style={{
                 borderLeftColor: 'rgb(176, 132, 0)',
                 transform: 'translate3d(-3px, 0px, 0px)',
               }}
             >
-              <span className="sr-only">
+              <span className="visually-hidden">
                 {browser.i18n.getMessage('dropdownAdditionalCleaningOptions')}
               </span>
             </button>

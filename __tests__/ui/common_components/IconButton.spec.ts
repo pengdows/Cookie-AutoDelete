@@ -16,7 +16,7 @@ describe('IconButton Component', () => {
 
   it('should have render method', () => {
     const instance = new IconButton({
-      iconName: ['fas', 'test'],
+      iconName: ['fas', 'home'],
       className: 'test'
     });
     expect(typeof instance.render).toBe('function');

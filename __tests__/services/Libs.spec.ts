@@ -1531,9 +1531,9 @@ describe('Library Functions', () => {
         .mockReturnValue('');
     });
     afterAll(() => {
-      global.browser.i18n.getMessage.clearMocks();
-      global.browser.runtime.getManifest.clearMocks();
-      global.browser.runtime.getURL.clearMocks();
+      global.browser.i18n.getMessage.mockClear();
+      global.browser.runtime.getManifest.mockClear();
+      global.browser.runtime.getURL.mockClear();
       jest.clearAllTimers();
     });
 
@@ -1674,9 +1674,9 @@ describe('Library Functions', () => {
       jest.clearAllTimers();
     });
     afterAll(() => {
-      global.browser.i18n.getMessage.clearMocks();
-      global.browser.runtime.getManifest.clearMocks();
-      global.browser.runtime.getURL.clearMocks();
+      global.browser.i18n.getMessage.mockClear();
+      global.browser.runtime.getManifest.mockClear();
+      global.browser.runtime.getURL.mockClear();
     });
 
     it('should expect one call to browser.notifications.create', () => {

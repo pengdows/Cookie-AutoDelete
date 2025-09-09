@@ -1,0 +1,178 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, 3.X.X-Branch, develop ]
+  pull_request:
+    branches: [ main, 3.X.X-Branch ]
+  release:
+    types: [ published ]
+
+jobs:
+  test:
+    name: Test & Lint
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run linting
+        run: npm run lint
+        
+      - name: Run tests with coverage
+        run: npm test
+        
+      - name: Upload coverage reports
+        if: matrix.node-version == '20.x'
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
+  build:
+    name: Build Extension
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build extension
+        run: npm run build
+        
+      - name: Check build output
+        run: |
+          echo "Extension directory contents:"
+          ls -la extension/
+          echo "Manifest files:"
+          find extension/ -name "manifest*.json" -exec echo "=== {} ===" \; -exec cat {} \;
+          
+      - name: Upload Chrome extension artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cookie-autodelete-chrome-${{ github.sha }}
+          path: extension/
+          retention-days: 30
+          
+      - name: Upload Firefox extension artifact  
+        uses: actions/upload-artifact@v4
+        with:
+          name: cookie-autodelete-firefox-${{ github.sha }}
+          path: extension/
+          retention-days: 30
+
+  build-packages:
+    name: Build Distribution Packages
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'release' || github.ref == 'refs/heads/3.X.X-Branch'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build extension packages
+        run: |
+          npm run build
+          
+          # Create Chrome package
+          cd extension
+          zip -r ../cookie-autodelete-chrome.zip . -x "manifest-firefox.json"
+          
+          # Create Firefox package  
+          if [ -f "manifest-firefox.json" ]; then
+            mv manifest.json manifest-chrome.json
+            mv manifest-firefox.json manifest.json
+            cd ..
+            cd extension
+            zip -r ../cookie-autodelete-firefox.xpi . -x "manifest-chrome.json"
+            mv manifest.json manifest-firefox.json
+            mv manifest-chrome.json manifest.json
+          else
+            cd ..
+            cd extension
+            zip -r ../cookie-autodelete-firefox.xpi .
+          fi
+          cd ..
+          
+      - name: Upload Chrome package
+        uses: actions/upload-artifact@v4
+        with:
+          name: cookie-autodelete-chrome-package-${{ github.sha }}
+          path: cookie-autodelete-chrome.zip
+          retention-days: 90
+          
+      - name: Upload Firefox package
+        uses: actions/upload-artifact@v4
+        with:
+          name: cookie-autodelete-firefox-package-${{ github.sha }}
+          path: cookie-autodelete-firefox.xpi
+          retention-days: 90
+          
+      - name: Release Assets
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            cookie-autodelete-chrome.zip
+            cookie-autodelete-firefox.xpi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run security audit
+        run: npm audit --audit-level=moderate
+        
+      - name: Check for outdated packages
+        run: npm outdated || true

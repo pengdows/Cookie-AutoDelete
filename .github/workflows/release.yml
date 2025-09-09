@@ -1,0 +1,181 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v3.8.3)'
+        required: true
+        type: string
+      prerelease:
+        description: 'Is this a pre-release?'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      release_id: ${{ steps.create_release.outputs.id }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Get version from tag or input
+        id: get_version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+            echo "prerelease=${{ github.event.inputs.prerelease }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+            # Check if this is a pre-release (contains alpha, beta, rc)
+            if echo "${GITHUB_REF#refs/tags/}" | grep -qE "(alpha|beta|rc)"; then
+              echo "prerelease=true" >> $GITHUB_OUTPUT
+            else
+              echo "prerelease=false" >> $GITHUB_OUTPUT
+            fi
+          fi
+          
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          # Get commits since last tag
+          LAST_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
+          if [ -n "$LAST_TAG" ]; then
+            echo "## Changes since $LAST_TAG" > release_notes.md
+            git log --pretty=format:"- %s (%h)" $LAST_TAG..HEAD >> release_notes.md
+          else
+            echo "## Changes" > release_notes.md
+            git log --pretty=format:"- %s (%h)" -10 >> release_notes.md
+          fi
+          
+          echo "" >> release_notes.md
+          echo "## Installation" >> release_notes.md
+          echo "- **Chrome**: Download \`cookie-autodelete-chrome.zip\` and install in Chrome Extensions page" >> release_notes.md
+          echo "- **Firefox**: Download \`cookie-autodelete-firefox.xpi\` and install as Firefox add-on" >> release_notes.md
+          
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.get_version.outputs.version }}
+          release_name: Cookie AutoDelete ${{ steps.get_version.outputs.version }}
+          body_path: release_notes.md
+          draft: false
+          prerelease: ${{ steps.get_version.outputs.prerelease }}
+
+  build-and-upload:
+    name: Build and Upload Assets
+    runs-on: ubuntu-latest
+    needs: create-release
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run tests
+        run: npm run test-all
+        
+      - name: Build extension
+        run: npm run build
+        
+      - name: Verify build
+        run: |
+          echo "=== Verifying build output ===" 
+          test -f extension/manifest.json || (echo "❌ manifest.json missing" && exit 1)
+          test -f extension/background.bundle.js || (echo "❌ background.bundle.js missing" && exit 1)
+          test -f extension/popup.bundle.js || (echo "❌ popup.bundle.js missing" && exit 1)
+          test -f extension/setting.bundle.js || (echo "❌ setting.bundle.js missing" && exit 1)
+          echo "✅ All required files present"
+          
+      - name: Create Chrome package
+        run: |
+          cd extension
+          # Create Chrome-specific manifest if needed
+          if [ -f manifest-chrome.json ]; then
+            cp manifest.json manifest-firefox-backup.json
+            cp manifest-chrome.json manifest.json
+          fi
+          zip -r ../cookie-autodelete-chrome.zip . -x "manifest-firefox.json" "manifest-firefox-backup.json"
+          # Restore Firefox manifest if it was backed up
+          if [ -f manifest-firefox-backup.json ]; then
+            mv manifest-firefox-backup.json manifest.json
+          fi
+          cd ..
+          
+      - name: Create Firefox package
+        run: |
+          cd extension  
+          # Create Firefox-specific manifest if needed
+          if [ -f manifest-firefox.json ]; then
+            cp manifest.json manifest-chrome-backup.json
+            cp manifest-firefox.json manifest.json
+          fi
+          zip -r ../cookie-autodelete-firefox.xpi . -x "manifest-chrome.json" "manifest-chrome-backup.json"
+          # Restore Chrome manifest if it was backed up
+          if [ -f manifest-chrome-backup.json ]; then
+            mv manifest-chrome-backup.json manifest.json
+          fi
+          cd ..
+          
+      - name: Get file sizes
+        run: |
+          echo "=== Package sizes ===" 
+          ls -lh cookie-autodelete-*.{zip,xpi}
+          
+      - name: Upload Chrome package
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: cookie-autodelete-chrome.zip
+          asset_name: cookie-autodelete-chrome.zip
+          asset_content_type: application/zip
+          
+      - name: Upload Firefox package
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: cookie-autodelete-firefox.xpi
+          asset_name: cookie-autodelete-firefox.xpi
+          asset_content_type: application/x-xpinstall
+          
+      - name: Create checksums
+        run: |
+          echo "=== Creating checksums ===" 
+          sha256sum cookie-autodelete-chrome.zip > checksums.txt
+          sha256sum cookie-autodelete-firefox.xpi >> checksums.txt
+          cat checksums.txt
+          
+      - name: Upload checksums
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: checksums.txt
+          asset_name: checksums.txt
+          asset_content_type: text/plain
