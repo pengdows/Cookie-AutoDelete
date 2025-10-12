@@ -29,6 +29,7 @@ import {
 } from './services/Libs';
 import StoreUser from './services/StoreUser';
 import TabEvents from './services/TabEvents';
+import WebNavigationEvents from './services/WebNavigationEvents';
 import { ReduxAction, ReduxConstants } from './typings/ReduxConstants';
 import ContextualIdentitiesEvents from './services/ContextualIdentitiesEvents';
 import SettingService from './services/SettingService';
@@ -139,6 +140,12 @@ const onStartUp = async () => {
   browser.tabs.onUpdated.addListener(TabEvents.onTabUpdate);
   browser.tabs.onRemoved.addListener(TabEvents.onDomainChangeRemove);
   browser.tabs.onRemoved.addListener(TabEvents.cleanFromTabEvents);
+
+  if (browser.webNavigation) {
+    browser.webNavigation.onCommitted.addListener(
+      WebNavigationEvents.onCommitted,
+    );
+  }
 
   // This should update the cookie badge count when cookies are changed.
   browser.cookies.onChanged.addListener(CookieEvents.onCookieChanged);

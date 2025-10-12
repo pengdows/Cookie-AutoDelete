@@ -107,6 +107,10 @@
     "message": "Ενεργοποίηση Greylist Cleanup στην επανεκκίνηση του προγράμματος περιήγησης",
     "description": "Enable Greylist Cleanup on Browser Restart"
   },
+  "greylistOnDirectVisit": {
+    "message": "Greylist directly visited sites automatically",
+    "description": "Greylist directly visited sites automatically"
+  },
   "enableNewVersionPopup": {
     "message": "Ενεργοποιήστε το αναδυόμενο παράθυρο όταν κυκλοφορήσει η νέα έκδοση",
     "description": "Enable Popup when New Version is Released"

@@ -231,6 +231,10 @@
     "message": "Tarayıcı Yeniden Başlatıldığında Gri Liste Temizlemeyi Etkinleştir",
     "description": "Enable Greylist Cleanup on Browser Restart"
   },
+  "greylistOnDirectVisit": {
+    "message": "Greylist directly visited sites automatically",
+    "description": "Greylist directly visited sites automatically"
+  },
   "enableNewVersionPopup": {
     "message": "Yeni Sürüm Yayınlandığında Popup Göstermeyi Aktifleştir",
     "description": "Enable Popup when New Version is Released"

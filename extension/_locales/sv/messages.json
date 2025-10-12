@@ -257,6 +257,10 @@
     "message": "Aktivera rensning av grålistan vid omstart av webbläsare",
     "description": "Enable Greylist Cleanup on Browser Restart"
   },
+  "greylistOnDirectVisit": {
+    "message": "Greylist directly visited sites automatically",
+    "description": "Greylist directly visited sites automatically"
+  },
   "enableNewVersionPopup": {
     "message": "Aktivera popupmeddelande när ny version släpps",
     "description": "Enable Popup when New Version is Released"

@@ -227,6 +227,10 @@
     "message": "在瀏覽器重新啟動時清除灰名單",
     "description": "Enable Greylist Cleanup on Browser Restart"
   },
+  "greylistOnDirectVisit": {
+    "message": "Greylist directly visited sites automatically",
+    "description": "Greylist directly visited sites automatically"
+  },
   "enableNewVersionPopup": {
     "message": "發布新版本時開啟彈出窗口",
     "description": "Enable Popup when New Version is Released"

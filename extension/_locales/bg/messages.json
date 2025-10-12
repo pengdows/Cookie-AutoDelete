@@ -163,6 +163,10 @@
     "message": "Активирайте почистването на Greylist при рестартиране на браузъра",
     "description": "Enable Greylist Cleanup on Browser Restart"
   },
+  "greylistOnDirectVisit": {
+    "message": "Greylist directly visited sites automatically",
+    "description": "Greylist directly visited sites automatically"
+  },
   "enableNewVersionPopup": {
     "message": "Показване на известие при ново издание на добавката",
     "description": "Enable Popup when New Version is Released"

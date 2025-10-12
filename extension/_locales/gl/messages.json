@@ -1,1 +1,6 @@
-{}
+{
+  "greylistOnDirectVisit": {
+    "message": "Greylist directly visited sites automatically",
+    "description": "Greylist directly visited sites automatically"
+  }
+}
