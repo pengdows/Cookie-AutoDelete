@@ -334,5 +334,9 @@
   "whiteListWordText": {
     "message": "화이트리스트",
     "description": "Whitelist"
+  },
+  "greylistOnDirectVisit": {
+    "message": "Greylist directly visited sites automatically",
+    "description": "Greylist directly visited sites automatically"
   }
 }

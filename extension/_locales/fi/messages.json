@@ -261,6 +261,10 @@
     "message": "Ota Greylist Cleanup käyttöön selaimen uudelleenkäynnistyksessä",
     "description": "Enable Greylist Cleanup on Browser Restart"
   },
+  "greylistOnDirectVisit": {
+    "message": "Greylist directly visited sites automatically",
+    "description": "Greylist directly visited sites automatically"
+  },
   "enableNewVersionPopup": {
     "message": "Ota ponnahdusikkuna käyttöön, kun uusi versio julkaistaan",
     "description": "Enable Popup when New Version is Released"

@@ -351,6 +351,17 @@ class Settings extends React.Component<SettingProps> {
           </div>
           <div className="form-group">
             <CheckboxSetting
+              text={browser.i18n.getMessage(
+                SettingID.GREYLIST_ON_DIRECT_VISIT,
+              )}
+              settingObject={settings[SettingID.GREYLIST_ON_DIRECT_VISIT]}
+              inline={true}
+              updateSetting={(payload) => onUpdateSetting(payload)}
+            />
+            <SettingsTooltip hrefURL={'#greylist-on-direct-visit'} />
+          </div>
+          <div className="form-group">
+            <CheckboxSetting
               text={browser.i18n.getMessage('cookieCleanUpOnStartText')}
               settingObject={settings[SettingID.CLEAN_OPEN_TABS_STARTUP]}
               inline={true}

@@ -97,6 +97,7 @@ declare const enum SettingID {
   CONTEXTUAL_IDENTITIES_AUTOREMOVE = 'contextualIdentitiesAutoRemove',
   DEBUG_MODE = 'debugMode',
   ENABLE_GREYLIST = 'enableGreyListCleanup',
+  GREYLIST_ON_DIRECT_VISIT = 'greylistOnDirectVisit',
   ENABLE_NEW_POPUP = 'enableNewVersionPopup',
   KEEP_DEFAULT_ICON = 'keepDefaultIcon',
   NOTIFY_AUTO = 'showNotificationAfterCleanup',

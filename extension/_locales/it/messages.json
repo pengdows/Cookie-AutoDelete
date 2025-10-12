@@ -289,6 +289,10 @@
     "message": "Attiva la pulizia della lista grigia al riavvio del browser",
     "description": "Enable Greylist Cleanup on Browser Restart"
   },
+  "greylistOnDirectVisit": {
+    "message": "Greylist directly visited sites automatically",
+    "description": "Greylist directly visited sites automatically"
+  },
   "enableNewVersionPopup": {
     "message": "Attiva il popup quando viene pubblicata una nuova versione",
     "description": "Enable Popup when New Version is Released"

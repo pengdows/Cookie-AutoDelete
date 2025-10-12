@@ -111,6 +111,10 @@
     "message": "Омогућите чишћење греилиста приликом поновног покретања прегледача",
     "description": "Enable Greylist Cleanup on Browser Restart"
   },
+  "greylistOnDirectVisit": {
+    "message": "Greylist directly visited sites automatically",
+    "description": "Greylist directly visited sites automatically"
+  },
   "enableNewVersionPopup": {
     "message": "Омогући искачући прозор када се објави ново издање",
     "description": "Enable Popup when New Version is Released"

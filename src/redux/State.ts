@@ -66,6 +66,10 @@ export const initialState: State = {
       name: SettingID.ENABLE_GREYLIST,
       value: true,
     },
+    [SettingID.GREYLIST_ON_DIRECT_VISIT]: {
+      name: SettingID.GREYLIST_ON_DIRECT_VISIT,
+      value: false,
+    },
     [SettingID.ENABLE_NEW_POPUP]: {
       name: SettingID.ENABLE_NEW_POPUP,
       value: false,
