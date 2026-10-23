@@ -202,11 +202,12 @@ export const getAllCookiesForDomain = async (
   const mainDomain = extractMainDomain(hostname);
 
   if (hostname.startsWith('file:')) {
-    const allCookies = await browser.cookies.getAll(
-      returnOptionalCookieAPIAttributes(state, {
-        storeId: cookieStoreId,
-      }),
-    );
+    const allCookies =
+      (await browser.cookies.getAll(
+        returnOptionalCookieAPIAttributes(state, {
+          storeId: cookieStoreId,
+        }),
+      )) ?? [];
     const regExp = new RegExp(hostname.slice(7)); // take out 'file://'
     cadLog(
       {
@@ -231,13 +232,14 @@ export const getAllCookiesForDomain = async (
       },
       debug,
     );
-    const cookiesFPI = await browser.cookies.getAll(
-      returnOptionalCookieAPIAttributes(state, {
-        domain: hostname,
-        firstPartyDomain: mainDomain,
-        storeId: cookieStoreId,
-      }),
-    );
+    const cookiesFPI =
+      (await browser.cookies.getAll(
+        returnOptionalCookieAPIAttributes(state, {
+          domain: hostname,
+          firstPartyDomain: mainDomain,
+          storeId: cookieStoreId,
+        }),
+      )) ?? [];
     cookiesFPI.forEach((c) => cookies.push(c));
     // Try to get additional firstParty Isolation cookies if
     // firstparty.isolation.use_site was enabled, to which we don't know
@@ -255,13 +257,14 @@ export const getAllCookiesForDomain = async (
       },
       debug,
     );
-    const cookiesFPIUseSite = await browser.cookies.getAll(
-      returnOptionalCookieAPIAttributes(state, {
-        domain: hostname,
-        firstPartyDomain: `(${proto},${mainDomain})`,
-        storeId: cookieStoreId,
-      }),
-    );
+    const cookiesFPIUseSite =
+      (await browser.cookies.getAll(
+        returnOptionalCookieAPIAttributes(state, {
+          domain: hostname,
+          firstPartyDomain: `(${proto},${mainDomain})`,
+          storeId: cookieStoreId,
+        }),
+      )) ?? [];
     cookiesFPIUseSite.forEach((c) => cookies.push(c));
     // firstPartyDomain = (https,domain.com,2048)
     // Should only be used when domain is an IP, but just in case.
@@ -277,13 +280,14 @@ export const getAllCookiesForDomain = async (
         },
         debug,
       );
-      const cookiesFPIUseSitePort = await browser.cookies.getAll(
-        returnOptionalCookieAPIAttributes(state, {
-          domain: hostname,
-          firstPartyDomain: `(${proto},${mainDomain},${siteURL.port})`,
-          storeId: cookieStoreId,
-        }),
-      );
+      const cookiesFPIUseSitePort =
+        (await browser.cookies.getAll(
+          returnOptionalCookieAPIAttributes(state, {
+            domain: hostname,
+            firstPartyDomain: `(${proto},${mainDomain},${siteURL.port})`,
+            storeId: cookieStoreId,
+          }),
+        )) ?? [];
       cookiesFPIUseSitePort.forEach((c) => cookies.push(c));
     }
   } else {
@@ -298,12 +302,13 @@ export const getAllCookiesForDomain = async (
       },
       debug,
     );
-    const cookiesDomain = await browser.cookies.getAll(
-      returnOptionalCookieAPIAttributes(state, {
-        domain: hostname,
-        storeId: cookieStoreId,
-      }),
-    );
+    const cookiesDomain =
+      (await browser.cookies.getAll(
+        returnOptionalCookieAPIAttributes(state, {
+          domain: hostname,
+          storeId: cookieStoreId,
+        }),
+      )) ?? [];
     cookiesDomain.forEach((c) => cookies.push(c));
   }
 
