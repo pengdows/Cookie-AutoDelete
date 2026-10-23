@@ -34,6 +34,7 @@
   "devDependencies": {
     "@types/jest": "^26.0.24",
     "@types/jest-when": "^3.5.2",
+    "@types/node": "^18.19.130",
     "@types/react": "^17.0.52",
     "@types/react-dom": "^17.0.18",
     "@types/react-redux": "^7.1.24",
