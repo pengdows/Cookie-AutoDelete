@@ -257,6 +257,10 @@
     "message": "Включити очищення у сірому списку при перезапуску браузера",
     "description": "Enable Greylist Cleanup on Browser Restart"
   },
+  "greylistOnDirectVisit": {
+    "message": "Greylist directly visited sites automatically",
+    "description": "Greylist directly visited sites automatically"
+  },
   "enableNewVersionPopup": {
     "message": "Увімкнути спливаюче вікно, коли нова версія зпущена",
     "description": "Enable Popup when New Version is Released"

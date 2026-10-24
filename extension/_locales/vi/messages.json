@@ -107,6 +107,10 @@
     "message": "Kích hoạt dọn dẹp Greylist khi khởi động lại trình duyệt",
     "description": "Enable Greylist Cleanup on Browser Restart"
   },
+  "greylistOnDirectVisit": {
+    "message": "Greylist directly visited sites automatically",
+    "description": "Greylist directly visited sites automatically"
+  },
   "enableNewVersionPopup": {
     "message": "Kích hoạt Popup khi Phiên bản mới được phát hành",
     "description": "Enable Popup when New Version is Released"

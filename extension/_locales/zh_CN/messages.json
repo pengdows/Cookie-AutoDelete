@@ -289,6 +289,10 @@
     "message": "在浏览器重启时启用 Greylist 清理",
     "description": "Enable Greylist Cleanup on Browser Restart"
   },
+  "greylistOnDirectVisit": {
+    "message": "Greylist directly visited sites automatically",
+    "description": "Greylist directly visited sites automatically"
+  },
   "enableNewVersionPopup": {
     "message": "当新版本发布时启用弹窗提醒",
     "description": "Enable Popup when New Version is Released"

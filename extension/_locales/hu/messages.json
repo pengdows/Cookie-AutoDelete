@@ -28,5 +28,9 @@
   "domainPlaceholderText": {
     "message": "example.com, aldomain.example.com, *. example.com",
     "description": "Domain Expression"
+  },
+  "greylistOnDirectVisit": {
+    "message": "Greylist directly visited sites automatically",
+    "description": "Greylist directly visited sites automatically"
   }
 }

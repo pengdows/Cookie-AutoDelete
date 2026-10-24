@@ -35,6 +35,7 @@
     "contextMenus",
     "contextualIdentities",
     "cookies",
+    "webNavigation",
     "notifications",
     "storage",
     "tabs"

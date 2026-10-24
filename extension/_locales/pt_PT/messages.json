@@ -289,6 +289,10 @@
     "message": "Ativar limpeza da lista cinza ao reiniciar o navegador",
     "description": "Enable Greylist Cleanup on Browser Restart"
   },
+  "greylistOnDirectVisit": {
+    "message": "Greylist directly visited sites automatically",
+    "description": "Greylist directly visited sites automatically"
+  },
   "enableNewVersionPopup": {
     "message": "Ativar popup quando uma nova versão é lançada",
     "description": "Enable Popup when New Version is Released"

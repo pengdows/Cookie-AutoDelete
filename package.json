@@ -34,6 +34,7 @@
   "devDependencies": {
     "@types/jest": "^26.0.24",
     "@types/jest-when": "^3.5.2",
+    "@types/node": "^18.19.130",
     "@types/react": "^17.0.52",
     "@types/react-dom": "^17.0.18",
     "@types/react-redux": "^7.1.24",
@@ -51,6 +52,7 @@
     "eslint-plugin-react": "^7.31.11",
     "jest": "^30.0.4",
     "jest-date-mock": "^1.0.8",
+    "jest-environment-jsdom": "^30.5.2",
     "jest-when": "^3.3.1",
     "prettier": "^2.8.1",
     "source-map-loader": "^3.0.2",

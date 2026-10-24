@@ -289,6 +289,10 @@
     "message": "Włącz czyszczenie szarej listy przy restarcie przeglądarki",
     "description": "Enable Greylist Cleanup on Browser Restart"
   },
+  "greylistOnDirectVisit": {
+    "message": "Greylist directly visited sites automatically",
+    "description": "Greylist directly visited sites automatically"
+  },
   "enableNewVersionPopup": {
     "message": "Pokazuj popup z informacjami o nowej wersji po każdej aktualizacji",
     "description": "Enable Popup when New Version is Released"

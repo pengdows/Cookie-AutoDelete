@@ -289,6 +289,10 @@
     "message": "ブラウザの再起動時にグレイリストのクリーンアップを有効にする",
     "description": "Enable Greylist Cleanup on Browser Restart"
   },
+  "greylistOnDirectVisit": {
+    "message": "Greylist directly visited sites automatically",
+    "description": "Greylist directly visited sites automatically"
+  },
   "enableNewVersionPopup": {
     "message": "新しいバージョンのリリース時にポップアップを有効にする",
     "description": "Enable Popup when New Version is Released"

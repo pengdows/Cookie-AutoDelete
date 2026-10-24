@@ -111,6 +111,10 @@
     "message": "Aktiveer Greylist-opruiming met die herblaai van die blaaier",
     "description": "Enable Greylist Cleanup on Browser Restart"
   },
+  "greylistOnDirectVisit": {
+    "message": "Greylist directly visited sites automatically",
+    "description": "Greylist directly visited sites automatically"
+  },
   "enableNewVersionPopup": {
     "message": "Aktiveer pop-up as die nuwe weergawe vrygestel word",
     "description": "Enable Popup when New Version is Released"
